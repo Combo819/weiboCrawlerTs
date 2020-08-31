@@ -1,6 +1,6 @@
 import { Document, Model, model, Types, Schema, Query } from "mongoose";
 
-const weiboSchema = Schema({
+const weiboSchema = new Schema({
     id:String,
     mid:String,
     createdId:String,
@@ -11,8 +11,9 @@ const weiboSchema = Schema({
     isLongText:Boolean,
     commentsCount:Number,
     attitudesCount:Number,
-    userId:Number,
+    user:{type:Schema.Types.ObjectId,ref:'User'},
+    comments:[{type:Schema.Types.ObjectId,ref:'Comment'}]
 });
 
-export default model("weibo",weiboSchema);
+export default model("Weibo",weiboSchema);
 
