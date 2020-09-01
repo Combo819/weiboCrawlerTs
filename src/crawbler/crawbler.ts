@@ -1,4 +1,7 @@
 import axiso from "axios";
+import {connectDB} from '../database';
+
+connectDB();
 const cheerio = require("cheerio");
 
 interface Headers {

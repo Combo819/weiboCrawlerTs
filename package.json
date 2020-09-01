@@ -5,18 +5,26 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "start:dev": "nodemon",
+    "build": "rimraf ./build && tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/async": "^3.2.3",
     "@types/mongoose": "^5.7.36",
+    "async": "^3.2.0",
     "axios": "^0.20.0",
-    "cheerio": "^1.0.0-rc.3"
+    "cheerio": "^1.0.0-rc.3",
+    "mongoose": "^5.10.2"
   },
   "devDependencies": {
     "@types/node": "^14.6.2",
+    "nodemon": "^2.0.4",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.0.0",
     "typescript": "^4.0.2"
   }
 }
