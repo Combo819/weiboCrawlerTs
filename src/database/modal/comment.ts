@@ -4,20 +4,37 @@
  * to request second batch of comment.
  */
 import { Document, Model, model, Types, Schema, Query } from "mongoose";
-import { subCommentSchema } from "./subComment";
-import { userSchema } from "./user";
+import { subCommentSchema, ISubComment } from "./subComment";
+import { userSchema, IUser } from "./user";
+
+export interface IComment extends Document {
+  id: string;
+  mid: string; // id for comment
+  rootid: string; // id for comment
+  rootidstr: string; // id for comment
+  floorNumber: number;
+  text: string; // unicode and html
+  maxId: string;
+  totalNumber: number; // the number of sub comments shown on client
+  user: IUser["_id"];
+  likeCount: number;
+  subComments: Array<ISubComment["_id"]>;
+}
+
 const commentSchema = new Schema({
-  id: { type: String, unique: true, required: true },  // id for comment
+  id: { type: String, unique: true, required: true }, // id for comment
   mid: { type: String, unique: true, required: true }, // id for comment
   rootid: { type: String, unique: true, required: true }, // id for comment
   rootidstr: String, // id for comment
   floorNumber: Number,
   text: String, // unicode and html
-  maxId: String,  
+  maxId: String,
   totalNumber: Number, // the number of sub comments shown on client
   user: { type: userSchema, required: true },
   likeCount: Number,
-  subComments: [{type:Schema.Types.ObjectId,ref:'SubComment'}],
+  subComments: [{ type: Schema.Types.ObjectId, ref: "SubComment" }],
 });
 
-export default model("Comment", commentSchema);
+const Comment: Model<IComment> = model("Comment", commentSchema);
+
+export default Comment;
