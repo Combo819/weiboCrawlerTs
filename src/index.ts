@@ -1,3 +1,3 @@
-import {connectDB} from './database';
+import {startCrawler} from './crawler';
 
-connectDB();
+startCrawler();
