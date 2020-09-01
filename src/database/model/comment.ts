@@ -8,6 +8,7 @@ import { subCommentSchema, ISubComment } from "./subComment";
 import { userSchema, IUser } from "./user";
 
 export interface IComment extends Document {
+  _id:string,
   id: string;
   mid: string; // id for comment
   rootid: string; // id for comment
@@ -18,10 +19,12 @@ export interface IComment extends Document {
   totalNumber: number; // the number of sub comments shown on client
   user: IUser["_id"];
   likeCount: number;
+  createdAt:string;
   subComments: Array<ISubComment["_id"]>;
 }
 
 const commentSchema = new Schema({
+  _id:{ type: String, unique: true, required: true },
   id: { type: String, unique: true, required: true }, // id for comment
   mid: { type: String, unique: true, required: true }, // id for comment
   rootid: { type: String, unique: true, required: true }, // id for comment
@@ -30,8 +33,9 @@ const commentSchema = new Schema({
   text: String, // unicode and html
   maxId: String,
   totalNumber: Number, // the number of sub comments shown on client
-  user: { type: userSchema, required: true },
+  user: { type: Number, required: true },
   likeCount: Number,
+  createdAt:String,
   subComments: [{ type: Schema.Types.ObjectId, ref: "SubComment" }],
 });
 

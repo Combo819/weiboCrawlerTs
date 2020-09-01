@@ -11,7 +11,7 @@ const worker = (task: Task<Object>, callback: any): void => {
   const { params, func } = task;
   func(params)
     .then((res: any) => {
-      console.log(res);
+      console.log(res,'res');
       callback();
     })
     .catch((err: Error) => {

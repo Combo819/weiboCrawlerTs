@@ -1,4 +1,5 @@
 import {startCrawler} from './crawler';
 import { connectDB } from "./database";
+import { WEIBO_ID } from "./config";
 connectDB();
-startCrawler();
+startCrawler(WEIBO_ID);

@@ -1,5 +1,6 @@
 import { Document, Model, model, Types, Schema, Query } from "mongoose";
 import { IUser } from "./user";
+import { IComment } from "./comment";
 export interface IWeibo extends Document {
   _id:string,
   id: string;
@@ -13,7 +14,7 @@ export interface IWeibo extends Document {
   commentsCount: number;
   attitudesCount: number;
   user: IUser["_id"];
-  comments: [{ type: Schema.Types.ObjectId; ref: "Comment" }];
+  comments: Array<IComment['_id']>;
 }
 
 const weiboSchema = new Schema({
@@ -29,7 +30,7 @@ const weiboSchema = new Schema({
   commentsCount: Number,
   attitudesCount: Number,
   user: { type: Number, ref: "User" },
-  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+  comments: [{ type: String, ref: "Comment" }],
 });
 
 const Weibo: Model<IWeibo> = model("Weibo", weiboSchema);
