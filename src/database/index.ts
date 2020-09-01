@@ -1,3 +1,4 @@
-import connectDB from './config'
+import connectDB from './config';
+import {CommentModel, SubCommentModel, UserModel, WeiboModel} from './model'
 
-export {connectDB}
+export {connectDB,CommentModel, SubCommentModel, UserModel, WeiboModel}

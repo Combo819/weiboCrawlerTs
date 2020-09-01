@@ -1,9 +1,10 @@
 import { Document, Model, model, Types, Schema, Query } from "mongoose";
 import { IUser } from "./user";
 export interface IWeibo extends Document {
+  _id:string,
   id: string;
   mid: string;
-  createdId: string;
+  createdAt: string;
   text: string;
   textLength: number;
   picIds: Array<string>;
@@ -16,9 +17,10 @@ export interface IWeibo extends Document {
 }
 
 const weiboSchema = new Schema({
-  id: String,
+  _id:{ type: String, unique: true, required: true },
+  id: { type: String, unique: true, required: true },
   mid: String,
-  createdId: String,
+  createdAt: String,
   text: String,
   textLength: Number,
   picIds: [String],
@@ -26,7 +28,7 @@ const weiboSchema = new Schema({
   isLongText: Boolean,
   commentsCount: Number,
   attitudesCount: Number,
-  user: { type: Schema.Types.ObjectId, ref: "User" },
+  user: { type: Number, ref: "User" },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 });
 
