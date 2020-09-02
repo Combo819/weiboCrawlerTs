@@ -14,7 +14,7 @@ export interface IWeibo extends Document {
   commentsCount: number;
   attitudesCount: number;
   user: IUser["_id"];
-  comments: Array<IComment['_id']>;
+  comments: Types.Array<IComment['_id']>;
 }
 
 const weiboSchema = new Schema({

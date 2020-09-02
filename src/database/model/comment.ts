@@ -3,7 +3,7 @@
  * url to get comment, id/mid is the id for weibo, max_id by default is not specified. That will fetch the first batch of comments. you will see the max_id in response. That's the param
  * to request second batch of comment.
  */
-import { Document, Model, model, Types, Schema, Query } from "mongoose";
+import { Document, Model, model, Types, Schema, Query, Mongoose } from "mongoose";
 import { subCommentSchema, ISubComment } from "./subComment";
 import { userSchema, IUser } from "./user";
 
@@ -20,7 +20,7 @@ export interface IComment extends Document {
   user: IUser["_id"];
   likeCount: number;
   createdAt:string;
-  subComments: Array<ISubComment["_id"]>;
+  subComments: Types.Array<ISubComment["_id"]>;
 }
 
 const commentSchema = new Schema({
@@ -36,7 +36,7 @@ const commentSchema = new Schema({
   user: { type: Number, required: true },
   likeCount: Number,
   createdAt:String,
-  subComments: [{ type: Schema.Types.ObjectId, ref: "SubComment" }],
+  subComments: [{ type: String, ref: "SubComment" }],
 });
 
 const Comment: Model<IComment> = model("Comment", commentSchema);

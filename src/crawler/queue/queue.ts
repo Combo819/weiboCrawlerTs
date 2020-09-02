@@ -20,5 +20,8 @@ const worker = (task: Task<Object>, callback: any): void => {
     });
 };
 const q = queue(worker, Q_CONCURRENCY);
+q.drain(()=>{
+  console.log('all items in queue have been processed')
+})
 
 export default q;

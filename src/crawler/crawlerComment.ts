@@ -1,7 +1,9 @@
 import { getCommentApi } from "../request";
 import { q } from "./queue";
-import { CommentModel, IComment, IWeibo } from "../database";
+import { CommentModel, IComment, IWeibo, WeiboModel } from "../database";
 import camelcaseKeys from "camelcase-keys";
+import crawlerSubComment from "./crawlerSubComment";
+import crawlerSubComments from "./crawlerSubComment";
 
 interface commentParams {
   weiboDoc: IWeibo;
@@ -68,12 +70,26 @@ const func = (params: commentParams): Promise<any> => {
             if (err) {
               console.log(err, "err");
             }
+            crawlerSubComments(commentDoc);
           });
         });
-        const { comments: commentsArr } = weiboDoc;
         const newComments: string[] = data.map((item: any) => item.id);
+        /* const { comments: commentsArr } = weiboDoc;
+       
         weiboDoc.comments = [...new Set([...commentsArr, ...newComments])];
-        weiboDoc.save();
+        weiboDoc.save(); */
+        /* WeiboModel.updateOne({_id:weiboDoc._id},{$addToSet:{comments:{$each:newComments}}},(err,raw)=>{
+          if(err){
+              console.log(err,'err in updating')
+          }
+      }); */
+      weiboDoc.comments.addToSet(...newComments);
+      weiboDoc.isNew = false;
+      weiboDoc.save(err=>{
+        if(err){
+          console.log('error in updating weiboDoc'+weiboDoc.id)
+        }
+      })
         if (Number(maxId) !== 0) {
           q.push([
             { func: func, params: { weiboDoc, id, mid, maxId, maxIdType } },
