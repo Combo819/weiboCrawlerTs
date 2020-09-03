@@ -7,7 +7,12 @@ export default class TimeWindow{
     private processingItems:number;
     private timeLength:number;
     private maxItems:number;
-
+   /**
+    * requesting flow controller. limit the items than can be proceeded in a time window
+    * @param q the queue
+    * @param timeLength the time window length, in s
+    * @param maxItems the max number of items can be proceeded in the time window
+    */
     constructor(q: AsyncQueue<Task<Object>>,timeLength:number,maxItems:number){
         this.q =q;
         this.processingItems = 0;
