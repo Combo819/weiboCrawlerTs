@@ -29,7 +29,7 @@ const func = (params: commentParams): Promise<any> => {
     const { weiboDoc, id, mid, maxId, maxIdType } = params;
     getCommentApi(id, maxId, mid, maxIdType)
       .then((res) => {
-        console.log(res, "res in getting comment");
+        // console.log(res, "res in getting comment");
         if (!res.data.data) {
           resolve();
           return;
@@ -67,29 +67,20 @@ const func = (params: commentParams): Promise<any> => {
             subComments: [],
           });
           commentDoc.save((err, product) => {
-            if (err) {
+            if (err&&err.code!==11000) {
               console.log(err, "err");
             }
             crawlerSubComments(commentDoc);
           });
         });
         const newComments: string[] = data.map((item: any) => item.id);
-        /* const { comments: commentsArr } = weiboDoc;
-       
-        weiboDoc.comments = [...new Set([...commentsArr, ...newComments])];
-        weiboDoc.save(); */
-        /* WeiboModel.updateOne({_id:weiboDoc._id},{$addToSet:{comments:{$each:newComments}}},(err,raw)=>{
-          if(err){
-              console.log(err,'err in updating')
+        weiboDoc.comments.addToSet(...newComments);
+        weiboDoc.isNew = false;
+        weiboDoc.save((err) => {
+          if (err&&err.code!==11000) {
+            console.log("error in updating weiboDoc" + weiboDoc.id);
           }
-      }); */
-      weiboDoc.comments.addToSet(...newComments);
-      weiboDoc.isNew = false;
-      weiboDoc.save(err=>{
-        if(err){
-          console.log('error in updating weiboDoc'+weiboDoc.id)
-        }
-      })
+        });
         if (Number(maxId) !== 0) {
           q.push([
             { func: func, params: { weiboDoc, id, mid, maxId, maxIdType } },

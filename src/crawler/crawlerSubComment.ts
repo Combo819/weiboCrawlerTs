@@ -29,7 +29,7 @@ function func(params: SubCommentParams): Promise<any> {
     const { cid, maxId, maxIdType, commentDoc } = params;
     getSubCommentApi(cid, maxId, maxIdType)
       .then((res) => {
-        console.log(res, "res in crawler subComment");
+        //console.log(res, "res in crawler subComment");
         const { data, maxId, maxIdType } = camelcaseKeys(res.data, {
           deep: true,
         });
@@ -64,7 +64,7 @@ function func(params: SubCommentParams): Promise<any> {
             likeCount,
           });
           subCommentDoc.save((err, product) => {
-            if (err) {
+            if (err&&err.code!==11000) {
               console.log(err, "err");
             }
           });
@@ -73,7 +73,7 @@ function func(params: SubCommentParams): Promise<any> {
         commentDoc.subComments.addToSet(...newSubComments);
         commentDoc.isNew = false;
         commentDoc.save((err, product) => {
-            if (err) {
+            if (err&&err.code!==11000) {
               console.log(err,'error in saving commentDoc');
             }
           });
@@ -83,7 +83,7 @@ function func(params: SubCommentParams): Promise<any> {
         resolve();
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
         reject(err);
       });
   });
