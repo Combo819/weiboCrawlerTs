@@ -1,4 +1,4 @@
-import connectDB from "./config";
+import connectDB from "./connect";
 import {
   CommentModel,
   SubCommentModel,

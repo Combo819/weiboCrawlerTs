@@ -1,10 +1,11 @@
 
 import { ConnectionOptions, connect } from "mongoose";
-const uri:string = 'mongodb://localhost:27017/weiboCrawler';
+import {URI} from '../config'
+
 
 const connectDB = async () => {
   try {
-    const mongoURI: string = uri;
+    const mongoURI: string = URI;
     const options: ConnectionOptions = {
       useNewUrlParser: true,
       useCreateIndex: true,

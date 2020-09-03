@@ -4,7 +4,7 @@
 2. nodejs, v12.16.3
 3. npm, v6.14.4
 #### run the app
-1. open `m.weibo.cn`, log in and copy the cookie in any http request.
+1. open `m.weibo.cn`, log in and copy the cookie from any http request.
 2. create a json file `src/credential.json`, add the token copied from cookie to the json file
 ```json
 {
