@@ -1,5 +1,9 @@
 import { UserModel } from "../database";
 
+/**
+ * save the user to the MongoDB
+ * @param user the user object from weibo or comment for subcomment
+ */
 export function saveUser(user: any) {
   return new Promise((resolve, reject) => {
     const {
@@ -25,7 +29,7 @@ export function saveUser(user: any) {
     });
 
     userDoc.save(function (err) {
-      if (err) {
+      if (err&&err.code!==11000) {
         reject(err);
       }
       resolve(userDoc);

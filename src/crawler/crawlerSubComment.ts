@@ -1,15 +1,13 @@
 import { getSubCommentApi } from "../request";
 import { q } from "./queue";
 import {
-  CommentModel,
   IComment,
   ISubComment,
   SubCommentModel,
 } from "../database";
-
 import camelcaseKeys from "camelcase-keys";
-import { resolve } from "path";
-import { reject } from "async";
+import { map } from "async";
+import { saveUser } from "./saveUser";
 interface SubCommentParams {
   commentDoc: IComment;
   cid: string;
@@ -25,11 +23,49 @@ export default function crawlerSubComments(commentDoc: IComment): void {
   q.push([{ func, params: firstSubCommentParams }]);
 }
 
+const iteratee = (item:any,callback:any)=>{
+  const {
+    id,
+    mid,
+    rootid,
+    rootidstr,
+    floorNumber,
+    text,
+    maxId,
+    totalNumber,
+    user,
+    likeCount,
+  } = item;
+  const subCommentDoc: ISubComment = new SubCommentModel({
+    _id: id,
+    id,
+    mid,
+    rootid,
+    rootidstr,
+    floorNumber,
+    text,
+    maxId,
+    totalNumber,
+    user: user.id,
+    likeCount,
+  });
+  subCommentDoc.save((err, product) => {
+    if(err){
+      console.log(err,'err in saving subComments')
+    }
+    if (err&&err.code!==11000) {
+      console.log(err, "err");
+    }
+    saveUser(user);
+    callback();
+  });
+}
+
 function func(params: SubCommentParams): Promise<any> {
   return new Promise((resolve, reject) => {
     const { cid, maxId, maxIdType, commentDoc } = params;
     getSubCommentApi(cid, maxId, maxIdType)
-      .then((res) => {
+      .then(async (res) => {
         //console.log(res, "res in crawler subComment");
         const { data, maxId, maxIdType } = camelcaseKeys(res.data, {
           deep: true,
@@ -38,41 +74,7 @@ function func(params: SubCommentParams): Promise<any> {
           resolve();
           return;
         }
-        data.forEach((element: any) => {
-          const {
-            id,
-            mid,
-            rootid,
-            rootidstr,
-            floorNumber,
-            text,
-            maxId,
-            totalNumber,
-            user: { id: userId },
-            likeCount,
-          } = element;
-          const subCommentDoc: ISubComment = new SubCommentModel({
-            _id: id,
-            id,
-            mid,
-            rootid,
-            rootidstr,
-            floorNumber,
-            text,
-            maxId,
-            totalNumber,
-            user: userId,
-            likeCount,
-          });
-          subCommentDoc.save((err, product) => {
-            if(err){
-              console.log(err,'err in saving subComments')
-            }
-            if (err&&err.code!==11000) {
-              console.log(err, "err");
-            }
-          });
-        });
+        await map(data,iteratee);
         const newSubComments: string[] = data.map((item: any) => item.id);
         commentDoc.subComments.addToSet(...newSubComments);
         commentDoc.isNew = false;
@@ -88,7 +90,6 @@ function func(params: SubCommentParams): Promise<any> {
         resolve();
       })
       .catch((err) => {
-        //console.log(err);
         reject(err);
       });
   });

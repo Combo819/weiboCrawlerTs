@@ -14,6 +14,11 @@ interface commentParams {
   maxIdType?: number | undefined;
 }
 
+/**
+ * starter function that push the first comment requesting worker to the queue
+ * @param weiboDoc the weibo document
+ * @param weiboId the weibo Id
+ */
 export default function crawlerComment(
   weiboDoc: IWeibo,
   weiboId: string
@@ -26,6 +31,11 @@ export default function crawlerComment(
   q.push([{ func, params: firstCommentParams }]);
 }
 
+/**
+ * the iteratee for async map function to iterate all comments and save them
+ * @param item comment item 
+ * @param callback 
+ */
 const iteratee = (item:any,callback:any):void=>{
   const {
     id,
@@ -56,15 +66,19 @@ const iteratee = (item:any,callback:any):void=>{
     subComments: [],
   });
   commentDoc.save((err, product) => {
-    callback();
     if (err&&err.code!==11000) {
       console.log(err, "err");
     }
     saveUser(user)
     crawlerSubComments(commentDoc);
+    callback();
   });
 }
 
+/**
+ * the function that will be executed in queue worker that fetches the comments
+ * @param params the information that we need to request the batch of comments
+ */
 const func = (params: commentParams): Promise<any> => {
   return new Promise((resolve, reject) => {
     const { weiboDoc, id, mid, maxId, maxIdType } = params;
@@ -78,43 +92,6 @@ const func = (params: commentParams): Promise<any> => {
         const { data, maxId, maxIdType } = camelcaseKeys(res.data.data, {
           deep: true,
         });
-       
-        /* data.forEach((element: any) => {
-          const {
-            id,
-            mid,
-            rootid,
-            rootidstr,
-            floorNumber,
-            text,
-            maxId,
-            totalNumber,
-            user: { id: userId },
-            likeCount,
-            createdAt,
-          } = element;
-          const commentDoc: IComment = new CommentModel({
-            _id: id,
-            id,
-            mid,
-            rootid,
-            rootidstr,
-            floorNumber,
-            text,
-            maxId,
-            totalNumber,
-            user: userId,
-            likeCount,
-            createdAt,
-            subComments: [],
-          });
-          commentDoc.save((err, product) => {
-            if (err&&err.code!==11000) {
-              console.log(err, "err");
-            }
-            crawlerSubComments(commentDoc);
-          });
-        }); */
         await map(data,iteratee);
         const newComments: string[] = data.map((item: any) => item.id);
         weiboDoc.comments.addToSet(...newComments);
