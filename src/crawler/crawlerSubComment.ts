@@ -21,6 +21,7 @@ export default function crawlerSubComments(commentDoc: IComment): void {
     commentDoc,
     cid: commentDoc.id,
   };
+  console.log(q.length(),'q.length',q.running(),'q.running','in first crawler sub comment')
   q.push([{ func, params: firstSubCommentParams }]);
 }
 
@@ -64,6 +65,9 @@ function func(params: SubCommentParams): Promise<any> {
             likeCount,
           });
           subCommentDoc.save((err, product) => {
+            if(err){
+              console.log(err,'err in saving subComments')
+            }
             if (err&&err.code!==11000) {
               console.log(err, "err");
             }
@@ -78,6 +82,7 @@ function func(params: SubCommentParams): Promise<any> {
             }
           });
         if (Number(maxId) !== 0) {
+          console.log(q.length(),'q.length',q.running(),'q.running','in 2 or more crawler sub comment')
           q.push([{ func, params: { commentDoc, cid, maxId, maxIdType } }]);
         }
         resolve();

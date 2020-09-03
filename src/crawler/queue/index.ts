@@ -1,3 +1,3 @@
-import q from "./queue";
+import q,{Task} from "./queue";
 
-export {q};
+export {q,Task};

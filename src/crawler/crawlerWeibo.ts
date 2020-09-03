@@ -1,16 +1,12 @@
-import axiso from "axios";
+
 import cheerio from "cheerio";
 import { getWeiboApi } from "../request";
-import { WEIBO_ID } from "../config";
 import {
-  CommentModel,
-  SubCommentModel,
-  UserModel,
   WeiboModel,
 } from "../database";
 import camelcaseKeys from "camelcase-keys";
 import { IWeibo } from "../database/model/weibo";
-
+import {saveUser} from './saveUser';
 async function crawlerWeibo(weiboId: string): Promise<IWeibo> {
   let weiboDoc: IWeibo | null;
   try {
@@ -21,7 +17,7 @@ async function crawlerWeibo(weiboId: string): Promise<IWeibo> {
     const renderData = Function(renderText + " return $render_data")();
     const status = camelcaseKeys(renderData.status, { deep: true });
     const resDoc: IWeibo | null = await saveWeibo(status);
-    saveUser(status);
+    saveUser(status.user);
     weiboDoc = resDoc;
   } catch (err) {
     if (err && err.code !== 11000) {
@@ -73,38 +69,6 @@ function saveWeibo(status: any): Promise<any> {
   });
 }
 
-function saveUser(status: any) {
-  return new Promise((resolve, reject) => {
-    const {
-      id,
-      screenName,
-      profileUrl,
-      gender,
-      followersCount,
-      followCount,
-      profileImageUrl,
-      avatarHd,
-    } = status.user;
-    const userDoc = new UserModel({
-      _id: id,
-      id,
-      screenName,
-      profileUrl,
-      gender,
-      followersCount,
-      followCount,
-      profileImageUrl,
-      avatarHd,
-    });
 
-    userDoc.save(function (err) {
-      if (err) {
-        reject(err);
-      }
-      resolve(userDoc);
-      // saved!
-    });
-  });
-}
 
 export default crawlerWeibo;

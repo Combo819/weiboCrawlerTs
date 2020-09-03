@@ -1,3 +1,3 @@
 import { startCrawler } from "./crawler";
-
-export {startCrawler}
+import {Task} from './queue'
+export {startCrawler,Task}

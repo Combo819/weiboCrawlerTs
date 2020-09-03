@@ -1,13 +1,18 @@
-import async from "async";
+import async,{AsyncQueue} from "async";
 import { Q_CONCURRENCY } from "../../config";
+import {TimeWindow} from '../../utility/timeWindow'
 const { queue } = async;
 
-interface Task<T> {
+export interface Task<T> {
   params: T;
   func(params: T): Promise<T>;
 }
 
+
+
+
 const worker = (task: Task<Object>, callback: any): void => {
+  timeWindow.execute();
   const { params, func } = task;
   func(params)
     .then((res: any) => {
@@ -19,7 +24,11 @@ const worker = (task: Task<Object>, callback: any): void => {
       callback();
     });
 };
-const q = queue(worker, Q_CONCURRENCY);
+const q:AsyncQueue<Task<Object>> = queue(worker, Q_CONCURRENCY);
+
+const timeWindow = new TimeWindow(q,30,6);
+
+
 q.drain(()=>{
   console.log('all items in queue have been processed')
 })
