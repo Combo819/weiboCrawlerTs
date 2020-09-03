@@ -6,6 +6,9 @@ import crawlerSubComments from "./crawlerSubComment";
 import {saveUser} from './saveUser';
 import {map} from 'async'
 
+/**
+ * the params that the func needs in async queue worker
+ */
 interface commentParams {
   weiboDoc: IWeibo;
   id: string;
@@ -15,7 +18,7 @@ interface commentParams {
 }
 
 /**
- * starter function that push the first comment requesting worker to the queue
+ * starter function that pushes the first comment requesting to the worker of queue
  * @param weiboDoc the weibo document
  * @param weiboId the weibo Id
  */
@@ -32,7 +35,7 @@ export default function crawlerComment(
 }
 
 /**
- * the iteratee for async map function to iterate all comments and save them
+ * the iteratee for async map function to iterate all comments in this batch and save them
  * @param item comment item 
  * @param callback 
  */

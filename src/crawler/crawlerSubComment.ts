@@ -8,12 +8,20 @@ import {
 import camelcaseKeys from "camelcase-keys";
 import { map } from "async";
 import { saveUser } from "./saveUser";
+/**
+ * the params that the func needs in async queue worker
+ */
 interface SubCommentParams {
   commentDoc: IComment;
   cid: string;
   maxId?: string | undefined;
   maxIdType?: number | undefined;
 }
+
+/**
+ * starter function that pushes the first sub comment  request of the current comment to the worker of the queue
+ * @param commentDoc the parent comment doc of this sub comment
+ */
 export default function crawlerSubComments(commentDoc: IComment): void {
   const firstSubCommentParams: SubCommentParams = {
     commentDoc,
@@ -23,6 +31,11 @@ export default function crawlerSubComments(commentDoc: IComment): void {
   q.push([{ func, params: firstSubCommentParams }]);
 }
 
+/**
+ * the iteratee for async map function to iterate all sub comments in this batch and save them
+ * @param item sub comment item 
+ * @param callback 
+ */
 const iteratee = (item:any,callback:any)=>{
   const {
     id,
@@ -61,6 +74,10 @@ const iteratee = (item:any,callback:any)=>{
   });
 }
 
+/**
+ * the function that will be executed in queue worker that fetches the sub comments
+ * @param params the information that we need to request the batch of sub comments
+ */
 function func(params: SubCommentParams): Promise<any> {
   return new Promise((resolve, reject) => {
     const { cid, maxId, maxIdType, commentDoc } = params;
