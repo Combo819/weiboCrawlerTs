@@ -21,16 +21,16 @@ const downloadHeader:DownloadHeader = {
 }
 
 const crawlerAxios: AxiosInstance = axios.create({
-  baseURL: baseUrl.weibo,
+  baseURL: baseUrl,
   headers: header,
 });
 
 const downloadAxios: AxiosInstance = axios.create({
-  
+  headers:downloadHeader,
 })
 
 
 
 
 
-export { crawlerAxios };
+export { crawlerAxios,downloadAxios };

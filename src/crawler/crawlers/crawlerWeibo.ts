@@ -1,12 +1,9 @@
-
 import cheerio from "cheerio";
 import { getWeiboApi } from "../../request";
-import {
-  WeiboModel,
-} from "../../database";
+import { WeiboModel } from "../../database";
 import camelcaseKeys from "camelcase-keys";
 import { IWeibo } from "../../database/model/weibo";
-import {saveUser} from './saveUser';
+import { saveUser } from "./saveUser";
 async function crawlerWeibo(weiboId: string): Promise<IWeibo> {
   let weiboDoc: IWeibo | null;
   try {
@@ -44,22 +41,45 @@ function saveWeibo(status: any): Promise<any> {
       commentsCount,
       attitudesCount,
       user: { id: userId },
+      pics,
+      pageInfo,
     } = status;
-    const weiboDoc: IWeibo = new WeiboModel({
-      _id: id,
-      id,
-      mid,
-      createdAt,
-      picIds,
-      text,
-      textLength,
-      repostsCount,
-      isLongText,
-      commentsCount,
-      attitudesCount,
-      user: userId,
-      comments: [],
-    });
+    let weiboDoc: IWeibo;
+    if (pics) {
+      weiboDoc = new WeiboModel({
+        _id: id,
+        id,
+        mid,
+        createdAt,
+        picIds,
+        text,
+        textLength,
+        repostsCount,
+        isLongText,
+        commentsCount,
+        attitudesCount,
+        user: userId,
+        comments: [],
+      });
+    } else {
+      weiboDoc = new WeiboModel({
+        _id: id,
+        id,
+        mid,
+        createdAt,
+        picIds,
+        text,
+        textLength,
+        repostsCount,
+        isLongText,
+        commentsCount,
+        attitudesCount,
+        user: userId,
+        comments: [],
+        pageInfo
+      });
+    }
+
     weiboDoc.save((err) => {
       if (err) {
         reject(err);
@@ -68,7 +88,5 @@ function saveWeibo(status: any): Promise<any> {
     });
   });
 }
-
-
 
 export default crawlerWeibo;

@@ -1,3 +1,4 @@
 import TimeWindow from './timeWindow';
+import showProgress from './progress';
 
-export {TimeWindow};
+export {TimeWindow,showProgress};

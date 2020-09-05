@@ -15,6 +15,8 @@ export interface IWeibo extends Document {
   attitudesCount: number;
   user: IUser["_id"];
   comments: Types.Array<IComment['_id']>;
+  pics?:any[];
+  pageInfo:any;
 }
 
 const weiboSchema = new Schema({
@@ -31,6 +33,8 @@ const weiboSchema = new Schema({
   attitudesCount: Number,
   user: { type: Number, ref: "User" },
   comments: [{ type: String, ref: "Comment" }],
+  pics:[{type:Object}],
+  pageInfo:{type:Object},
 });
 
 const Weibo: Model<IWeibo> = model("Weibo", weiboSchema);
