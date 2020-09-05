@@ -1,6 +1,6 @@
-import { getCommentApi } from "../request";
-import { q } from "./queue";
-import { CommentModel, IComment, IWeibo, WeiboModel } from "../database";
+import { getCommentApi } from "../../request";
+import { q } from "../queue";
+import { CommentModel, IComment, IWeibo, WeiboModel } from "../../database";
 import camelcaseKeys from "camelcase-keys";
 import crawlerSubComments from "./crawlerSubComment";
 import {saveUser} from './saveUser';

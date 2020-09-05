@@ -1,5 +1,5 @@
-import crawlerWeibo from "./crawlerWeibo";
-import crawlerComment from './crawlerComment';
+import crawlerWeibo from "./crawlers/crawlerWeibo";
+import crawlerComment from './crawlers/crawlerComment';
 async function startCrawler(weiboId: string): Promise<any> {
   //connectDB();
   try {

@@ -1,10 +1,10 @@
-import { getSubCommentApi } from "../request";
-import { q } from "./queue";
+import { getSubCommentApi } from "../../request";
+import { q } from "../queue";
 import {
   IComment,
   ISubComment,
   SubCommentModel,
-} from "../database";
+} from "../../database";
 import camelcaseKeys from "camelcase-keys";
 import { map } from "async";
 import { saveUser } from "./saveUser";
@@ -63,9 +63,6 @@ const iteratee = (item:any,callback:any)=>{
     likeCount,
   });
   subCommentDoc.save((err, product) => {
-    if(err){
-      console.log(err,'err in saving subComments')
-    }
     if (err&&err.code!==11000) {
       console.log(err, "err");
     }

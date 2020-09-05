@@ -1,4 +1,4 @@
-import { UserModel } from "../database";
+import { UserModel } from "../../database";
 
 /**
  * save the user to the MongoDB

@@ -1,11 +1,11 @@
 
 import cheerio from "cheerio";
-import { getWeiboApi } from "../request";
+import { getWeiboApi } from "../../request";
 import {
   WeiboModel,
-} from "../database";
+} from "../../database";
 import camelcaseKeys from "camelcase-keys";
-import { IWeibo } from "../database/model/weibo";
+import { IWeibo } from "../../database/model/weibo";
 import {saveUser} from './saveUser';
 async function crawlerWeibo(weiboId: string): Promise<IWeibo> {
   let weiboDoc: IWeibo | null;
