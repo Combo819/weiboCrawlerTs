@@ -19,15 +19,24 @@ function func(params: ParamsQueue): Promise<any> {
       .then((res) => {
         const { data, headers } = res;
         const urlPath = url.split("?")[0];
+        if (!fs.existsSync(path.resolve(staticPath, "images"))) {
+          fs.mkdirSync(path.resolve(staticPath, "images"));
+        }
         const writer = fs.createWriteStream(
           path.resolve(staticPath, "images", path.basename(urlPath))
         );
         showProgress(data, headers["content-length"], path.basename(urlPath));
         data.pipe(writer);
         writer.on("finish", resolve);
-        writer.on("error", reject);
+        writer.on("error", (err) => {
+          console.log(err);
+          reject(err);
+        });
       })
-      .catch(reject);
+      .catch((err) => {
+        console.log(err);
+        reject(err);
+      });
   });
 }
 

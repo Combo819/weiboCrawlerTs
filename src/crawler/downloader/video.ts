@@ -19,8 +19,11 @@ function func(params: QueueParams): Promise<any> {
       .then((res) => {
         const { data, headers } = res;
         const urlPath = url.split("?")[0];
+        if(!fs.existsSync(path.resolve(staticPath,'videos'))){
+          fs.mkdirSync(path.resolve(staticPath,'videos'));
+        }
         const writer = fs.createWriteStream(
-          path.resolve(staticPath, "images", path.basename(urlPath))
+          path.resolve(staticPath, "videos", path.basename(urlPath))
         );
         showProgress(data, headers["content-length"], path.basename(urlPath));
         data.pipe(writer);

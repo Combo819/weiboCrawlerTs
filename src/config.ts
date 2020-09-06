@@ -33,11 +33,11 @@ const baseUrl: string = "https://m.weibo.cn";
 
 const Q_CONCURRENCY: number = 1;
 
-const WEIBO_ID = "4544018355331305";
+const WEIBO_ID = "4459339055992673";
 
 const token: string = parsedConfigs.token;
 
-const staticPath = path.dirname(__dirname+'/static');
+const staticPath = path.resolve(__dirname,'../','static');
 
 if(!fs.existsSync(path)){
   console.log('create folder '+staticPath);
