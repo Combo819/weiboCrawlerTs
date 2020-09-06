@@ -11,7 +11,13 @@ async function crawlerWeibo(weiboId: string): Promise<IWeibo> {
     const res = await getWeiboApi(weiboId);
     //console.log(res);
     const $ = cheerio.load(res.data);
-    const renderText: string = $("script").get()[1].children[0].data;
+    let renderText:string
+    try{
+      renderText = $("script").get()[1].children[0].data;
+    }catch(err){
+      console.log(`the weibo doesn't exist or token expired`);
+      throw err;
+    }
     const renderData = Function(renderText + " return $render_data")();
     const status = camelcaseKeys(renderData.status, { deep: true });
     const resDoc: IWeibo | null = await saveWeibo(status);
