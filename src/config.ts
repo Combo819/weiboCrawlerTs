@@ -48,4 +48,4 @@ if (!token) {
   throw new Error(`The token doesn't exist. Add a token to the src/credential`);
 }
 
-export { token, URI, baseUrl, Q_CONCURRENCY, WEIBO_ID };
+export { token, URI, baseUrl, Q_CONCURRENCY, WEIBO_ID,staticPath };

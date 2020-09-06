@@ -32,6 +32,7 @@ export default function crawlerComment(
   };
   console.log(q.length(),'q.length',q.running(),'q.running','in first crawler   comment')
   q.push([{ func, params: firstCommentParams }]);
+  q.resume();
 }
 
 /**

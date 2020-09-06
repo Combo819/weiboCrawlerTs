@@ -4,6 +4,7 @@ import { WeiboModel } from "../../database";
 import camelcaseKeys from "camelcase-keys";
 import { IWeibo } from "../../database/model/weibo";
 import { saveUser } from "./saveUser";
+
 async function crawlerWeibo(weiboId: string): Promise<IWeibo> {
   let weiboDoc: IWeibo | null;
   try {
@@ -59,6 +60,7 @@ function saveWeibo(status: any): Promise<any> {
         commentsCount,
         attitudesCount,
         user: userId,
+        pics,
         comments: [],
       });
     } else {
