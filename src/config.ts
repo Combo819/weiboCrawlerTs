@@ -33,7 +33,7 @@ const baseUrl: string = "https://m.weibo.cn";
 
 const Q_CONCURRENCY: number = 1;
 
-const WEIBO_ID = "4459339055992673";
+const WEIBO_ID = "4542889755945880";
 
 const token: string = parsedConfigs.token;
 

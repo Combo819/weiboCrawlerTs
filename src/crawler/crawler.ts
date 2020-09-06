@@ -9,7 +9,7 @@ async function startCrawler(weiboId: string): Promise<any> {
     const weiboDoc = await crawlerWeibo(weiboId);
     const { pics, pageInfo } = weiboDoc;
     q.pause();
-    if (pics) {
+    if (pics&&pics.length>0) {
       pics.forEach((element: any) => {
         downloadImage(element.large.url, staticPath);
       });
