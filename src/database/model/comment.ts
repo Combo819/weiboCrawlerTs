@@ -21,6 +21,7 @@ export interface IComment extends Document {
   likeCount: number;
   createdAt:string;
   subComments: Types.Array<ISubComment["_id"]>;
+  pic:any;
 }
 
 const commentSchema = new Schema({
@@ -37,6 +38,7 @@ const commentSchema = new Schema({
   likeCount: Number,
   createdAt:String,
   subComments: [{ type: String, ref: "SubComment" }],
+  pic:Object
 });
 
 const Comment: Model<IComment> = model("Comment", commentSchema);

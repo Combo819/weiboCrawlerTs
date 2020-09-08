@@ -4,6 +4,10 @@ import { WeiboModel } from "../../database";
 import camelcaseKeys from "camelcase-keys";
 import { IWeibo } from "../../database/model/weibo";
 import { saveUser } from "./saveUser";
+import downloadImage from '../downloader/image';
+import downloadVideo from '../downloader/video';
+import {staticPath} from '../../config';
+import { q } from "../queue";
 
 async function crawlerWeibo(weiboId: string): Promise<IWeibo> {
   let weiboDoc: IWeibo | null;
@@ -51,41 +55,37 @@ function saveWeibo(status: any): Promise<any> {
       pics,
       pageInfo,
     } = status;
-    let weiboDoc: IWeibo;
-    if (pics) {
-      weiboDoc = new WeiboModel({
-        _id: id,
-        id,
-        mid,
-        createdAt,
-        picIds,
-        text,
-        textLength,
-        repostsCount,
-        isLongText,
-        commentsCount,
-        attitudesCount,
-        user: userId,
-        pics,
-        comments: [],
+    let weiboDoc: IWeibo = new WeiboModel({
+      _id: id,
+      id,
+      mid,
+      createdAt,
+      picIds,
+      text,
+      textLength,
+      repostsCount,
+      isLongText,
+      commentsCount,
+      attitudesCount,
+      user: userId,
+      pics,
+      comments: [],
+      pageInfo,
+    });
+    q.pause();
+    if (pics && pics.length > 0) {
+      pics.forEach((element: any) => {
+        downloadImage(element.large.url, staticPath);
       });
-    } else {
-      weiboDoc = new WeiboModel({
-        _id: id,
-        id,
-        mid,
-        createdAt,
-        picIds,
-        text,
-        textLength,
-        repostsCount,
-        isLongText,
-        commentsCount,
-        attitudesCount,
-        user: userId,
-        comments: [],
-        pageInfo
-      });
+    }
+    if (pageInfo) {
+      
+      const { mp4720PMp4, mp4HdMp4, mp4LdMp4 } = pageInfo.urls;
+      const videoUrl = [mp4720PMp4, mp4HdMp4, mp4LdMp4].find(
+        (ele) => typeof ele === "string"
+      );
+      pageInfo.url = videoUrl;
+      downloadVideo(videoUrl, staticPath);
     }
 
     weiboDoc.save((err) => {

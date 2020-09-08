@@ -4,7 +4,9 @@ import { CommentModel, IComment, IWeibo, WeiboModel } from "../../database";
 import camelcaseKeys from "camelcase-keys";
 import crawlerSubComments from "./crawlerSubComment";
 import {saveUser} from './saveUser';
-import {map} from 'async'
+import {map} from 'async';
+import downloadImage from '../downloader/image';
+import {staticPath} from '../../config'
 
 /**
  * the params that the func needs in async queue worker
@@ -53,6 +55,7 @@ const iteratee = (item:any,callback:any):void=>{
     user,
     likeCount,
     createdAt,
+    pic
   } = item;
   const commentDoc: IComment = new CommentModel({
     _id: id,
@@ -68,10 +71,15 @@ const iteratee = (item:any,callback:any):void=>{
     likeCount,
     createdAt,
     subComments: [],
+    pic
   });
+  
   commentDoc.save((err, product) => {
     if (err&&err.code!==11000) {
       console.log(err, "err");
+    }
+    if(pic){
+      downloadImage(pic.large.url,staticPath);
     }
     saveUser(user)
     crawlerSubComments(commentDoc);

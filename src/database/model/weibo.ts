@@ -16,7 +16,7 @@ export interface IWeibo extends Document {
   user: IUser["_id"];
   comments: Types.Array<IComment['_id']>;
   pics?:any[];
-  pageInfo:any;
+  pageInfo?:any;
 }
 
 const weiboSchema = new Schema({

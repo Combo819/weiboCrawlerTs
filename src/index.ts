@@ -1,5 +1,6 @@
-import {startCrawler} from './crawler';
-import { connectDB } from "./database";
-import { WEIBO_ID } from "./config";
+
+import { connectDB, WeiboModel } from "./database";
+import startServer from './server/server'
+
 connectDB();
-startCrawler(WEIBO_ID);
+startServer();

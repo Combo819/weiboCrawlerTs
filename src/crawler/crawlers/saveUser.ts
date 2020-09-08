@@ -1,5 +1,6 @@
 import { UserModel } from "../../database";
-
+import downloadImage from '../downloader/image';
+import {staticPath} from '../../config'
 /**
  * save the user to the MongoDB
  * @param user the user object from weibo or comment for subcomment
@@ -29,6 +30,7 @@ export function saveUser(user: any) {
     });
 
     userDoc.save(function (err) {
+      downloadImage(avatarHd,staticPath);
       if (err&&err.code!==11000) {
         reject(err);
       }
