@@ -34,3 +34,4 @@ server {
         }
 }
 ```
+then save it and run `sudo service nginx restart`
