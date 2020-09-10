@@ -1,5 +1,5 @@
 import { startCrawler } from "../crawler";
-import { WeiboModel, IWeibo, CommentModel, IComment } from "../database";
+import { WeiboModel, IWeibo, CommentModel, IComment, UserModel } from "../database";
 import { port } from "../config";
 import express from "express";
 import cors from 'cors';
@@ -26,7 +26,7 @@ function startServer(): void {
       });
   });
 
-  app.get("/api/weibo", (request, response) => {
+  app.get("/api/weibos", (request, response) => {
     const page: string = (request.query.page || 0) as string;
     const pageSize: string = (request.query.pageSize || 10) as string;
     WeiboModel.find({})
@@ -43,7 +43,7 @@ function startServer(): void {
       });
   });
 
-  app.get("/api/comments/:weiboId", (request, response) => {
+  app.get("/api/weibo/:weiboId", (request, response) => {
     const { weiboId } = request.params;
     const page: string = (request.query.page || 0) as string;
     const pageSize: string = (request.query.pageSize || 10) as string;
@@ -53,28 +53,52 @@ function startServer(): void {
         path: "comments",
         limit: parseInt(pageSize),
         skip: parseInt(page) * parseInt(pageSize),
-        populate: { path: "user" },
+        populate: { path: "user",model:UserModel },
       })
       .exec(async (err, res) => {
         if (err) {
           throw err;
         }
         const weibo: IWeibo | null = await WeiboModel.findById(weiboId).exec();
-        response.send({ weibo: res, totalNumber: weibo && weibo.comments });
+        response.send({ weibo: res, totalNumber: weibo && weibo.comments.length });
       });
   });
 
-  app.get("/api/subComments/:commentId", (request, response) => {
+
+
+  app.get("/api/comments/:weiboId", (request, response) => {
+    const { weiboId } = request.params;
+    const page: string = (request.query.page || 0) as string;
+    const pageSize: string = (request.query.pageSize || 10) as string;
+    WeiboModel.findById(weiboId)
+      .populate({ path: "user" })
+      .populate({
+        path: "comments",
+        sort:{likeCount:-1},
+        limit: parseInt(pageSize),
+        skip: parseInt(page) * parseInt(pageSize),
+        populate: { path: "user",model:UserModel },
+      })
+      .exec(async (err, res) => {
+        if (err) {
+          throw err;
+        }
+        const weibo: IWeibo | null = await WeiboModel.findById(weiboId).exec();
+        response.send({ comments: res&&res.comments, totalNumber: weibo && weibo.comments.length });
+      });
+  });
+
+  app.get("/api/comment/:commentId", (request, response) => {
     const { commentId } = request.params;
     const page: string = (request.query.page || 0) as string;
     const pageSize: string = (request.query.pageSize || 10) as string;
     CommentModel.findById(commentId)
-      .populate({ path: "user" })
+      .populate({ path: "user",model:UserModel })
       .populate({
         path: "subComments",
         limit: parseInt(pageSize),
         skip: parseInt(page) * parseInt(pageSize),
-        populate: { path: "user" },
+        populate: [{ path: "user",model:UserModel },{path:'rootid',model:CommentModel}],
       })
       .exec(async (err, res) => {
         if (err) {

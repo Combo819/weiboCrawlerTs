@@ -22,7 +22,7 @@ export const subCommentSchema = new Schema({
   _id:{ type: String, unique: true, required: true },
   id: { type: String, unique: true, required: true }, //id for subComment
   mid: { type: String, unique: true, required: true }, //id for subComment
-  rootid: { type: String, required: true }, //id for parent comment
+  rootid: { type: String, required: true, ref: "Comment" }, //id for parent comment
   rootidstr: String, //id for parent comment
   floorNumber: Number,
   text: String, // unicode and html

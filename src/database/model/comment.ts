@@ -22,6 +22,7 @@ export interface IComment extends Document {
   createdAt:string;
   subComments: Types.Array<ISubComment["_id"]>;
   pic:any;
+  weiboId:string;
 }
 
 const commentSchema = new Schema({
@@ -38,7 +39,8 @@ const commentSchema = new Schema({
   likeCount: Number,
   createdAt:String,
   subComments: [{ type: String, ref: "SubComment" }],
-  pic:Object
+  pic:Object,
+  weiboId:{type:String,required:true}
 });
 
 const Comment: Model<IComment> = model("Comment", commentSchema);

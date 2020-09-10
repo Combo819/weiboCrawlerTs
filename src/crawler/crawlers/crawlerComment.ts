@@ -55,7 +55,8 @@ const iteratee = (item:any,callback:any):void=>{
     user,
     likeCount,
     createdAt,
-    pic
+    pic,
+    weiboId
   } = item;
   const commentDoc: IComment = new CommentModel({
     _id: id,
@@ -71,7 +72,8 @@ const iteratee = (item:any,callback:any):void=>{
     likeCount,
     createdAt,
     subComments: [],
-    pic
+    pic,
+    weiboId
   });
   
   commentDoc.save((err, product) => {
@@ -104,7 +106,7 @@ const func = (params: commentParams): Promise<any> => {
         const { data, maxId, maxIdType } = camelcaseKeys(res.data.data, {
           deep: true,
         });
-        await map(data,iteratee);
+        await map({...data,weiboId:id},iteratee);
         const newComments: string[] = data.map((item: any) => item.id);
         weiboDoc.comments.addToSet(...newComments);
         weiboDoc.isNew = false;
