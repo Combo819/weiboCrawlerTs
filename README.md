@@ -11,9 +11,9 @@
     "token":"a_very_long_string",
 }
 ```
-3. open any weibo page in `m.weibo.cn` that you want to crawl. copy the id from the url. For example, for weibo `https://m.weibo.cn/detail/4459339055992673`, copy `4459339055992673` and parse it on `src/config.ts`
-4. run `npm i`
-5. run `npm run start:dev` to start the crawler
+3. run `npm i`
+4. run `npm run start:dev` to start the crawler server
+5. go to [weibo-crawler-react](https://github.com/Combo819/weibo-crawler-react) to clone the front end
 
 #### serve the images and videos
 nginx config in `/etc/nginx/sites-enabled`  
