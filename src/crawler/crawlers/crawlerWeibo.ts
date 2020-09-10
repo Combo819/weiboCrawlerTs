@@ -78,7 +78,7 @@ function saveWeibo(status: any): Promise<any> {
         downloadImage(element.large.url, staticPath);
       });
     }
-    if (pageInfo) {
+    if (pageInfo.urls) {
       
       const { mp4720PMp4, mp4HdMp4, mp4LdMp4 } = pageInfo.urls;
       const videoUrl = [mp4720PMp4, mp4HdMp4, mp4LdMp4].find(

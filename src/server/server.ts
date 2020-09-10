@@ -14,6 +14,7 @@ function startServer(): void {
   app.use(cors());
   app.post("/api/save", (request, response) => {
     const { weiboId }: { weiboId: string } = request.body;
+    console.log(weiboId,'weiboId')
     startCrawler(weiboId)
       .then((res) => {
         const resBody: ResponseBody = { status: "success" };
