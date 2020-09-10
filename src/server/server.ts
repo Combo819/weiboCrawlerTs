@@ -17,7 +17,6 @@ function startServer(): void {
     startCrawler(weiboId)
       .then((res) => {
         const resBody: ResponseBody = { status: "success" };
-
         response.send(resBody);
       })
       .catch((err) => {

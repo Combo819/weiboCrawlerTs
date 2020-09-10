@@ -5,7 +5,7 @@ import { Document, Model, model, Types, Schema, Query } from "mongoose";
 import { userSchema, IUser } from "./user";
 
 export interface ISubComment extends Document {
-  _id:string,
+  _id: string;
   id: string; //id for subComment
   mid: string; //id for subComment
   rootid: string; //id for parent comment
@@ -19,7 +19,7 @@ export interface ISubComment extends Document {
 }
 
 export const subCommentSchema = new Schema({
-  _id:{ type: String, unique: true, required: true },
+  _id: { type: String, unique: true, required: true },
   id: { type: String, unique: true, required: true }, //id for subComment
   mid: { type: String, unique: true, required: true }, //id for subComment
   rootid: { type: String, required: true, ref: "Comment" }, //id for parent comment
@@ -32,6 +32,6 @@ export const subCommentSchema = new Schema({
   likeCount: Number,
 });
 
-const SubComment:Model<ISubComment> = model("SubComment", subCommentSchema)
+const SubComment: Model<ISubComment> = model("SubComment", subCommentSchema);
 
 export default SubComment;
