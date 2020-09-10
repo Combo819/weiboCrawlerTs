@@ -43,6 +43,7 @@ export default function crawlerComment(
  * @param callback 
  */
 const iteratee = (item:any,callback:any):void=>{
+  console.log(item,'item');
   const {
     id,
     mid,
@@ -58,6 +59,7 @@ const iteratee = (item:any,callback:any):void=>{
     pic,
     weiboId
   } = item;
+  console.log(weiboId,'weiboId')
   const commentDoc: IComment = new CommentModel({
     _id: id,
     id,
@@ -106,7 +108,8 @@ const func = (params: commentParams): Promise<any> => {
         const { data, maxId, maxIdType } = camelcaseKeys(res.data.data, {
           deep: true,
         });
-        await map({...data,weiboId:id},iteratee);
+        console.log(id,'id outer')
+        await map(data.map((item:any)=>({...item,weiboId:id})),iteratee);
         const newComments: string[] = data.map((item: any) => item.id);
         weiboDoc.comments.addToSet(...newComments);
         weiboDoc.isNew = false;

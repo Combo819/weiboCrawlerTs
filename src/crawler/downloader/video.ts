@@ -9,7 +9,7 @@ export default function downloadVideo(url: string, staticPath: string): void {
     url,
     staticPath,
   };
-  q.push([{ params, func }]);
+  q.unshift([{ params, func }]);
 }
 
 function func(params: QueueParams): Promise<any> {
