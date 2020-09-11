@@ -6,14 +6,16 @@
 #### run the app
 1. open `m.weibo.cn`, log in and copy the cookie from any http request.
 2. create a json file `src/credential.json`, add the token copied from cookie to the json file
+3. add the mongodb uri in the `src/credential.json`
 ```json
 {
     "token":"a_very_long_string",
+    "URI":"mongodb://localhost:27017"
 }
 ```
-3. run `npm i`
-4. run `npm run start:dev` to start the crawler server
-5. go to [weibo-crawler-react](https://github.com/Combo819/weibo-crawler-react) to clone the front end
+4. run `npm i`
+5. run `npm run start:dev` to start the crawler server
+6. go to [weibo-crawler-react](https://github.com/Combo819/weibo-crawler-react) to clone the front end
 
 #### serve the images and videos
 nginx config in `/etc/nginx/sites-enabled`  
