@@ -1,7 +1,7 @@
 import path from "path";
 const fs = require("fs");
 if (!fs.existsSync(path.resolve(__dirname, '../',"credential.json"))) {
-  throw new Error("You should write a src/credential.json to store the token");
+  throw new Error("You should write a credential.json on project folder to store the token");
 }
 
 interface BaseUrl {
